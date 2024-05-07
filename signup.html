@@ -5,11 +5,11 @@
 <body style="background-image:url(images/signup.png)">
 <div class="header">
 				<ul>
-				<li style="float:left;border-right:none"><a href="signup.php" class="logo"><img src="images/LOGO.png" width="30px" height="30px"><strong> M.O.S.H. </strong>Medical Online Scheduling Helper</a></li>
-					<li><a href="mainpage.php">Home</a></li>
+				<li style="float:left;border-right:none"><a href="signup.html" class="logo"><img src="images/LOGO.png" width="30px" height="30px"><strong> M.O.S.H. </strong>Medical Online Scheduling Helper</a></li>
+					<li><a href="mainpage.html">Home</a></li>
 				</ul>
 </div>
-<form action="signup.php" method="post">
+<form action="signup.html" method="post">
 	<div class="sucontainer">
 		<label><b>Name:</b></label><br>
 		<input type="text" placeholder="Enter Full Name" name="fname" required><br>
@@ -43,11 +43,11 @@
 			<button type="submit" name="signup" style="float:right">Sign Up</button>
 		</div>
   </div>
-<?php
+<?html
 
 function newUser()
 {
-		include 'dbconfig.php';
+		include 'dbconfig.html';
 		$name=$_POST['fname'];
 		$gender=$_POST['gender'];
 		$dob=$_POST['dob'];
@@ -61,7 +61,7 @@ function newUser()
 	if (mysqli_query($conn, $sql)) 
 	{
 		echo "<h2>Record created successfully!! Redirecting to login page....</h2>";
-		header( "Refresh:3; url=mainpage.php");
+		header( "Refresh:3; url=mainpage.html");
 
 	} 
 	else
@@ -71,7 +71,7 @@ function newUser()
 }
 function checkusername()
 {
-	include 'dbconfig.php';
+	include 'dbconfig.html';
 	$usn=$_POST['username'];
 	$sql= "SELECT * FROM Patient WHERE Username = '$username'";
 
