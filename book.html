@@ -1,165 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="main.css">
-<script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
-</head><?html include "dbconfig.html"; ?>
-<script>
-function getTown(val) {
-	$.ajax({
-	type: "POST",
-	url: "get_town.html",
-	data:'countryid='+val,
-	success: function(data){
-		$("#town-list").html(data);
-	}
-	});
-}
-function getClinic(val) {
-	$.ajax({
-	type: "POST",
-	url: "getclinic.html",
-	data:'townid='+val,
-	success: function(data){
-		$("#clinic-list").html(data);
-	}
-	});
-}
-function getDoctorday(val) {
-	$.ajax({
-	type: "POST",
-	url: "getdoctordaybooking.html",
-	data:'cid='+val,
-	success: function(data){
-		$("#doctor-list").html(data);
-	}
-	});
-}
-
-function getDay(val) {
-	var cidval=document.getElementById("clinic-list").value;
-	var didval=document.getElementById("doctor-list").value;
-	$.ajax({
-	type: "POST",
-	url: "getDay.html",
-	data:'date='+val+'&cidval='+cidval+'&didval='+didval,
-	success: function(data){
-		$("#datestatus").html(data);
-	}
-	});
-}
-
-</script>
-<body style="background-image:url(images/book.png)">
-	<div class="header">
-		<ul>
-			<li style="float:left;border-right:none"><a href="ulogin.html" class="logo"><img src="images/LOGO.png" width="30px" height="30px"><strong> M.O.S.H. </strong>Medical Online Scheduling Helper</a></li>
-			<li><a href="book.html">Book Now</a></li>
-			<li><a href="ulogin.html">Home</a></li>
-		</ul>
-	</div>
-	<form action="book.html" method="post">
-	<div class="sucontainer" style="background-image:url(images/SHA.png)">
-		<label><b>Name:</b></label><br>
-		<input type="text" placeholder="Enter Full name of patient" name="fname" required><br>
-		
-		<label><b>Gender</b></label><br>
-		<input type="radio" name="gender" value="female">Female
-		<input type="radio" name="gender" value="male">Male
-		<input type="radio" name="gender" value="other">Other<br><br>
-	
-		<label style="font-size:20px" >City:</label><br>
-		<select name="city" id="city-list" class="demoInputBox"  onChange="getTown(this.value);" style="width:100%;height:35px;border-radius:9px">
-		<option value="">Select City</option>
-		<?html
-		$sql1="SELECT distinct(city) FROM clinic";
-         $results=$conn->query($sql1); 
-		while($rs=$results->fetch_assoc()) { 
-		?>
-		<option value="<?html echo $rs["city"]; ?>"><?html echo $rs["city"]; ?></option>
-		<?html
-		}
-		?>
-		</select>
-        <br>
-	
-		<label style="font-size:20px" >Town:</label><br>
-		<select id="town-list" name="Town" onChange="getClinic(this.value);" style="width:100%;height:35px;border-radius:9px">
-		<option value="">Select Town</option>
-		</select><br>
-		
-		<label style="font-size:20px" >Clinic:</label><br>
-		<select id="clinic-list" name="Clinic" onChange="getDoctorday(this.value);" style="width:100%;height:35px;border-radius:9px">
-		<option value="">Select Clinic</option>
-		</select><br>
-		
-		<label style="font-size:20px" >Doctor:</label><br>
-		<select id="doctor-list" name="Doctor" onChange="getDate(this.value);" style="width:100%;height:35px;border-radius:9px">
-		<option value="">Select Doctor</option>
-		</select><br>
-		
-		
-		<label><b>Date of Visit:</b></label><br>
-		<input type="date" name="dov" onChange="getDay(this.value);" min="<?html echo date('Y-m-d');?>" max="<?html echo date('Y-m-d',strtotime('+7 day'));?>" required><br><br>
-		<div id="datestatus"> </div>
-		
-		<div class="container">
-			<button type="submit" style="position:center" name="submit" value="Submit">Submit</button>
-		</div>
-<?html
-session_start();
-if(isset($_POST['submit']))
-{
-		
-		include 'dbconfig.html';
-		$fname=$_POST['fname'];
-		$gender=$_POST['gender'];
-		$username=$_SESSION['username'];
-		$cid=$_POST['Clinic'];
-		$did=$_POST['Doctor'];
-		$dov=$_POST['dov'];
-		$status="Booking Registered.Wait for the update";
-		$timestamp=date('Y-m-d H:i:s');
-		$sql = "INSERT INTO book (Username,Fname,Gender,CID,DID,DOV,Timestamp,Status) VALUES ('$username','$fname','$gender','$cid','$did','$dov','$timestamp','$status') ";
-		if(!empty($_POST['fname'])&&!empty($_POST['gender'])&&!empty($_SESSION['username'])&&!empty($_POST['Clinic'])&&!empty($_POST['Doctor']) && !empty($_POST['dov']))
-		{
-			$checkday = strtotime($dov);
-			$compareday = date("l", $checkday);
-			$flag=0;
-			require_once("dbconfig.html");
-			$query ="SELECT * FROM doctor_availability WHERE DID = '" .$did. "' AND CID='".$cid."'";
-			$results = $conn->query($query);
-			while($rs=$results->fetch_assoc())
-			{
-				if($rs["day"]==$compareday)
-				{
-					$flag++;
-					break;
-				}
-			}
-			if($flag==0)
-			{
-				echo "<h2>Select another date as Doctor Unavailable on ".$compareday."</h2>";
-			}
-			else
-			{
-				if (mysqli_query($conn, $sql)) 
-				{
-						echo "<h2>Booking successful!! Redirecting to home page....</h2>";
-						header( "Refresh:2; url=ulogin.html");
-
-				} 
-				else
-				{
-					echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-				}
-			}
-		}
-		else
-		{
-			echo "Enter data properly!!!!";
-		}
-}
-?>
-	</form>
-</body>
-</html>
+<title></title>
+</head>
+<body>
+&lt;html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;link rel=&quot;stylesheet&quot; href=&quot;main.css&quot;&gt;<br/>
+&lt;script src=&quot;https://code.jquery.com/jquery-2.1.1.min.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;<br/>
+&lt;/head&gt;&lt;?php include &quot;dbconfig.php&quot;; ?&gt;<br/>
+&lt;script&gt;<br/>
+function getTown(val) {<br/>
+&nbsp;&nbsp;&nbsp;$.ajax({<br/>
+&nbsp;&nbsp;&nbsp;type: &quot;POST&quot;,<br/>
+&nbsp;&nbsp;&nbsp;url: &quot;get_town.php&quot;,<br/>
+&nbsp;&nbsp;&nbsp;data:&#39;countryid=&#39;+val,<br/>
+&nbsp;&nbsp;&nbsp;success: function(data){<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(&quot;#town-list&quot;).html(data);<br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;});<br/>
+}<br/>
+function getClinic(val) {<br/>
+&nbsp;&nbsp;&nbsp;$.ajax({<br/>
+&nbsp;&nbsp;&nbsp;type: &quot;POST&quot;,<br/>
+&nbsp;&nbsp;&nbsp;url: &quot;getclinic.php&quot;,<br/>
+&nbsp;&nbsp;&nbsp;data:&#39;townid=&#39;+val,<br/>
+&nbsp;&nbsp;&nbsp;success: function(data){<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(&quot;#clinic-list&quot;).html(data);<br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;});<br/>
+}<br/>
+function getDoctorday(val) {<br/>
+&nbsp;&nbsp;&nbsp;$.ajax({<br/>
+&nbsp;&nbsp;&nbsp;type: &quot;POST&quot;,<br/>
+&nbsp;&nbsp;&nbsp;url: &quot;getdoctordaybooking.php&quot;,<br/>
+&nbsp;&nbsp;&nbsp;data:&#39;cid=&#39;+val,<br/>
+&nbsp;&nbsp;&nbsp;success: function(data){<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(&quot;#doctor-list&quot;).html(data);<br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;});<br/>
+}<br/>
+<br/>
+function getDay(val) {<br/>
+&nbsp;&nbsp;&nbsp;var cidval=document.getElementById(&quot;clinic-list&quot;).value;<br/>
+&nbsp;&nbsp;&nbsp;var didval=document.getElementById(&quot;doctor-list&quot;).value;<br/>
+&nbsp;&nbsp;&nbsp;$.ajax({<br/>
+&nbsp;&nbsp;&nbsp;type: &quot;POST&quot;,<br/>
+&nbsp;&nbsp;&nbsp;url: &quot;getDay.php&quot;,<br/>
+&nbsp;&nbsp;&nbsp;data:&#39;date=&#39;+val+&#39;&amp;cidval=&#39;+cidval+&#39;&amp;didval=&#39;+didval,<br/>
+&nbsp;&nbsp;&nbsp;success: function(data){<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(&quot;#datestatus&quot;).html(data);<br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;});<br/>
+}<br/>
+<br/>
+&lt;/script&gt;<br/>
+&lt;body style=&quot;background-image:url(images/book.png)&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;div class=&quot;header&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li style=&quot;float:left;border-right:none&quot;&gt;&lt;a href=&quot;ulogin.php&quot; class=&quot;logo&quot;&gt;&lt;img src=&quot;images/LOGO.png&quot; width=&quot;30px&quot; height=&quot;30px&quot;&gt;&lt;strong&gt; M.O.S.H. &lt;/strong&gt;Medical Online Scheduling Helper&lt;/a&gt;&lt;/li&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;a href=&quot;book.php&quot;&gt;Book Now&lt;/a&gt;&lt;/li&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;a href=&quot;ulogin.php&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;form action=&quot;book.php&quot; method=&quot;post&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;div class=&quot;sucontainer&quot; style=&quot;background-image:url(images/SHA.png)&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;&lt;b&gt;Name:&lt;/b&gt;&lt;/label&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;text&quot; placeholder=&quot;Enter Full name of patient&quot; name=&quot;fname&quot; required&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;&lt;b&gt;Gender&lt;/b&gt;&lt;/label&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;female&quot;&gt;Female<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot;&gt;Male<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;other&quot;&gt;Other&lt;br&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label style=&quot;font-size:20px&quot; &gt;City:&lt;/label&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;select name=&quot;city&quot; id=&quot;city-list&quot; class=&quot;demoInputBox&quot;  onChange=&quot;getTown(this.value);&quot; style=&quot;width:100%;height:35px;border-radius:9px&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value=&quot;&quot;&gt;Select City&lt;/option&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;?php<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$sql1=&quot;SELECT distinct(city) FROM clinic&quot;;<br/>
+         $results=$conn-&gt;query($sql1); <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while($rs=$results-&gt;fetch_assoc()) { <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value=&quot;&lt;?php echo $rs[&quot;city&quot;]; ?&gt;&quot;&gt;&lt;?php echo $rs[&quot;city&quot;]; ?&gt;&lt;/option&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;?php<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/select&gt;<br/>
+        &lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label style=&quot;font-size:20px&quot; &gt;Town:&lt;/label&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;select id=&quot;town-list&quot; name=&quot;Town&quot; onChange=&quot;getClinic(this.value);&quot; style=&quot;width:100%;height:35px;border-radius:9px&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value=&quot;&quot;&gt;Select Town&lt;/option&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/select&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label style=&quot;font-size:20px&quot; &gt;Clinic:&lt;/label&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;select id=&quot;clinic-list&quot; name=&quot;Clinic&quot; onChange=&quot;getDoctorday(this.value);&quot; style=&quot;width:100%;height:35px;border-radius:9px&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value=&quot;&quot;&gt;Select Clinic&lt;/option&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/select&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label style=&quot;font-size:20px&quot; &gt;Doctor:&lt;/label&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;select id=&quot;doctor-list&quot; name=&quot;Doctor&quot; onChange=&quot;getDate(this.value);&quot; style=&quot;width:100%;height:35px;border-radius:9px&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value=&quot;&quot;&gt;Select Doctor&lt;/option&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/select&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;&lt;b&gt;Date of Visit:&lt;/b&gt;&lt;/label&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;date&quot; name=&quot;dov&quot; onChange=&quot;getDay(this.value);&quot; min=&quot;&lt;?php echo date(&#39;Y-m-d&#39;);?&gt;&quot; max=&quot;&lt;?php echo date(&#39;Y-m-d&#39;,strtotime(&#39;+7 day&#39;));?&gt;&quot; required&gt;&lt;br&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div id=&quot;datestatus&quot;&gt; &lt;/div&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=&quot;container&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button type=&quot;submit&quot; style=&quot;position:center&quot; name=&quot;submit&quot; value=&quot;Submit&quot;&gt;Submit&lt;/button&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br/>
+&lt;?php<br/>
+session_start();<br/>
+if(isset($_POST[&#39;submit&#39;]))<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include &#39;dbconfig.php&#39;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$fname=$_POST[&#39;fname&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$gender=$_POST[&#39;gender&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$username=$_SESSION[&#39;username&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$cid=$_POST[&#39;Clinic&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$did=$_POST[&#39;Doctor&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$dov=$_POST[&#39;dov&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$status=&quot;Booking Registered.Wait for the update&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$timestamp=date(&#39;Y-m-d H:i:s&#39;);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$sql = &quot;INSERT INTO book (Username,Fname,Gender,CID,DID,DOV,Timestamp,Status) VALUES (&#39;$username&#39;,&#39;$fname&#39;,&#39;$gender&#39;,&#39;$cid&#39;,&#39;$did&#39;,&#39;$dov&#39;,&#39;$timestamp&#39;,&#39;$status&#39;) &quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!empty($_POST[&#39;fname&#39;])&amp;&amp;!empty($_POST[&#39;gender&#39;])&amp;&amp;!empty($_SESSION[&#39;username&#39;])&amp;&amp;!empty($_POST[&#39;Clinic&#39;])&amp;&amp;!empty($_POST[&#39;Doctor&#39;]) &amp;&amp; !empty($_POST[&#39;dov&#39;]))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$checkday = strtotime($dov);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$compareday = date(&quot;l&quot;, $checkday);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$flag=0;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;require_once(&quot;dbconfig.php&quot;);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$query =&quot;SELECT * FROM doctor_availability WHERE DID = &#39;&quot; .$did. &quot;&#39; AND CID=&#39;&quot;.$cid.&quot;&#39;&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$results = $conn-&gt;query($query);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while($rs=$results-&gt;fetch_assoc())<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($rs[&quot;day&quot;]==$compareday)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$flag++;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($flag==0)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;&lt;h2&gt;Select another date as Doctor Unavailable on &quot;.$compareday.&quot;&lt;/h2&gt;&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (mysqli_query($conn, $sql)) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;&lt;h2&gt;Booking successful!! Redirecting to home page....&lt;/h2&gt;&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header( &quot;Refresh:2; url=ulogin.php&quot;);<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Error: &quot; . $sql . &quot;&lt;br&gt;&quot; . mysqli_error($conn);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Enter data properly!!!!&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+}<br/>
+?&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;/form&gt;<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</body></html>

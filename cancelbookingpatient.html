@@ -1,64 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="main.css">
-<script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
-</head><?html include "dbconfig.html"; ?>
-<body style="background-image:url(images/cancel.png)">
-	<div class="header">
-		<ul>
-			<li style="float:left;border-right:none"><a href="ulogin.html" class="logo"><img src="images/LOGO.png" width="30px" height="30px"><strong> Skylabs </strong>Appointment Booking System</a></li>
-			<li><a href="ulogin.html">Home</a></li>
-		</ul>
-	</div>
-	<form action="cancelbookingpatient.html" method="post">
-	<div class="sucontainer">
-		<label style="font-size:20px" >Select Appointment to Cancel:</label><br>
-		<select name="appointment" id="appointment-list" class="demoInputBox"  style="width:100%;height:35px;border-radius:9px">
-		<option value="">Select Appointment</option>
-		<?html
-		session_start();
-		$username=$_SESSION['username'];
-		$date= date('Y-m-d');
-		$sql1="SELECT * from book where username='".$username."'and status not like 'Cancelled by Patient' and DOV >='$date'";
-         $results=$conn->query($sql1); 
-		while($rs=$results->fetch_assoc()) {
-			$sql2="select * from doctor where did=".$rs["DID"];
-			$results2=$conn->query($sql2);
-				while($rs2=$results2->fetch_assoc()) {
-					$sql3="select * from clinic where cid=".$rs["CID"];
-					$results3=$conn->query($sql3);
-		while($rs3=$results3->fetch_assoc()) {
-			
-		?>
-		<option value="<?html echo $rs["Timestamp"]; ?>"><?html echo "Patient: ".$rs["Fname"]." Date: ".$rs["DOV"]." -Dr.".$rs2["name"]." -Clinic: ".$rs3["name"]." -Town: ".$rs3["town"]." - Booked on:".$rs["Timestamp"]; ?></option>
-		<?html
-		}
-		}
-		}
-		?>
-		</select>
-		
-
-			<button type="submit" style="position:center" name="submit" value="Submit">Submit</button>
-	</form>
-	<?html
-if(isset($_POST['submit']))
-{
-		$username=$_SESSION['username'];
-		$timestamp=$_POST['appointment'];
-		$updatequery="update book set Status='Cancelled by Patient' where username='$username' and timestamp= '$timestamp'";
-				if (mysqli_query($conn, $updatequery)) 
-				{
-							echo "Appointment Cancelled successfully..!!<br>";
-							header( "Refresh:2; url=ulogin.html");
-
-				} 
-				else
-				{
-					echo "Error: " . $updatequery . "<br>" . mysqli_error($conn);
-				}
-
-}
-?>
-</body>
-</html>
+<title></title>
+</head>
+<body>
+&lt;html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;link rel=&quot;stylesheet&quot; href=&quot;main.css&quot;&gt;<br/>
+&lt;script src=&quot;https://code.jquery.com/jquery-2.1.1.min.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;<br/>
+&lt;/head&gt;&lt;?php include &quot;dbconfig.php&quot;; ?&gt;<br/>
+&lt;body style=&quot;background-image:url(images/cancel.png)&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;div class=&quot;header&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li style=&quot;float:left;border-right:none&quot;&gt;&lt;a href=&quot;ulogin.php&quot; class=&quot;logo&quot;&gt;&lt;img src=&quot;images/LOGO.png&quot; width=&quot;30px&quot; height=&quot;30px&quot;&gt;&lt;strong&gt; Skylabs &lt;/strong&gt;Appointment Booking System&lt;/a&gt;&lt;/li&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;a href=&quot;ulogin.php&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;form action=&quot;cancelbookingpatient.php&quot; method=&quot;post&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;div class=&quot;sucontainer&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label style=&quot;font-size:20px&quot; &gt;Select Appointment to Cancel:&lt;/label&gt;&lt;br&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;select name=&quot;appointment&quot; id=&quot;appointment-list&quot; class=&quot;demoInputBox&quot;  style=&quot;width:100%;height:35px;border-radius:9px&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value=&quot;&quot;&gt;Select Appointment&lt;/option&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;?php<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;session_start();<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$username=$_SESSION[&#39;username&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$date= date(&#39;Y-m-d&#39;);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$sql1=&quot;SELECT * from book where username=&#39;&quot;.$username.&quot;&#39;and status not like &#39;Cancelled by Patient&#39; and DOV &gt;=&#39;$date&#39;&quot;;<br/>
+         $results=$conn-&gt;query($sql1); <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while($rs=$results-&gt;fetch_assoc()) {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$sql2=&quot;select * from doctor where did=&quot;.$rs[&quot;DID&quot;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$results2=$conn-&gt;query($sql2);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while($rs2=$results2-&gt;fetch_assoc()) {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$sql3=&quot;select * from clinic where cid=&quot;.$rs[&quot;CID&quot;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$results3=$conn-&gt;query($sql3);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while($rs3=$results3-&gt;fetch_assoc()) {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value=&quot;&lt;?php echo $rs[&quot;Timestamp&quot;]; ?&gt;&quot;&gt;&lt;?php echo &quot;Patient: &quot;.$rs[&quot;Fname&quot;].&quot; Date: &quot;.$rs[&quot;DOV&quot;].&quot; -Dr.&quot;.$rs2[&quot;name&quot;].&quot; -Clinic: &quot;.$rs3[&quot;name&quot;].&quot; -Town: &quot;.$rs3[&quot;town&quot;].&quot; - Booked on:&quot;.$rs[&quot;Timestamp&quot;]; ?&gt;&lt;/option&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;?php<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/select&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button type=&quot;submit&quot; style=&quot;position:center&quot; name=&quot;submit&quot; value=&quot;Submit&quot;&gt;Submit&lt;/button&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;/form&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;?php<br/>
+if(isset($_POST[&#39;submit&#39;]))<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$username=$_SESSION[&#39;username&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$timestamp=$_POST[&#39;appointment&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$updatequery=&quot;update book set Status=&#39;Cancelled by Patient&#39; where username=&#39;$username&#39; and timestamp= &#39;$timestamp&#39;&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (mysqli_query($conn, $updatequery)) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Appointment Cancelled successfully..!!&lt;br&gt;&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header( &quot;Refresh:2; url=ulogin.php&quot;);<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Error: &quot; . $updatequery . &quot;&lt;br&gt;&quot; . mysqli_error($conn);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+<br/>
+}<br/>
+?&gt;<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</body></html>

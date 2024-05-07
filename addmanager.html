@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title></title>
+</head>
+<body>
+&lt;html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;link rel=&quot;stylesheet&quot; href=&quot;adminmain.css&quot;&gt; <br/>
+&lt;/head&gt;<br/>
+&lt;body background= &quot;managerview.jpg&quot;&gt;<br/>
+&lt;ul&gt;<br/>
+&lt;li class=&quot;dropdown&quot;&gt;&lt;font color=&quot;yellow&quot; size=&quot;10&quot;&gt;ADMIN MODE&lt;/font&gt;&lt;/li&gt;<br/>
+&lt;br&gt;<br/>
+&lt;h2&gt;<br/>
+  &lt;li class=&quot;dropdown&quot;&gt;    <br/>
+  &lt;a href=&quot;javascript:void(0)&quot; class=&quot;dropbtn&quot;&gt;Doctor&lt;/a&gt;<br/>
+    &lt;div class=&quot;dropdown-content&quot;&gt;<br/>
+      &lt;a href=&quot;adddoctor.php&quot;&gt;Add Doctor&lt;/a&gt;<br/>
+      &lt;a href=&quot;deletedoctor.php&quot;&gt;Delete Doctor&lt;/a&gt;<br/>
+      &lt;a href=&quot;showdoctor.php&quot;&gt;Show Doctor&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;showdoctorschedule.php&quot;&gt;Show Doctor Schedule&lt;/a&gt;<br/>
+    &lt;/div&gt;<br/>
+  &lt;/li&gt;<br/>
+  <br/>
+  &lt;li class=&quot;dropdown&quot;&gt;<br/>
+  &lt;a href=&quot;javascript:void(0)&quot; class=&quot;dropbtn&quot;&gt;Clinic&lt;/a&gt;<br/>
+    &lt;div class=&quot;dropdown-content&quot;&gt;<br/>
+      &lt;a href=&quot;addclinic.php&quot;&gt;Add Clinic&lt;/a&gt;<br/>
+      &lt;a href=&quot;deleteclinic.php&quot;&gt;Delete Clinic&lt;/a&gt;<br/>
+      &lt;a href=&quot;adddoctorclinic.php&quot;&gt;Assign Doctor to Clinic&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;addmanagerclinic.php&quot;&gt;Assign Manager to Clinic&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;deletedoctorclinic.php&quot;&gt;Delete Doctor from Clinic&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;deletemanagerclinic.php&quot;&gt;Delete Manager from Clinic&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;showclinic.php&quot;&gt;Show Clinic&lt;/a&gt;<br/>
+    &lt;/div&gt;<br/>
+  &lt;/li&gt;<br/>
+  &lt;li class=&quot;dropdown&quot;&gt;    <br/>
+  &lt;a href=&quot;javascript:void(0)&quot; class=&quot;dropbtn&quot;&gt;Manager&lt;/a&gt;<br/>
+    &lt;div class=&quot;dropdown-content&quot;&gt;<br/>
+      &lt;a href=&quot;addmanager.php&quot;&gt;Add Manager&lt;/a&gt;<br/>
+      &lt;a href=&quot;deletemanager.php&quot;&gt;Delete Manager&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;showmanager.php&quot;&gt;Show Manager&lt;/a&gt;<br/>
+    &lt;/div&gt;<br/>
+  &lt;/li&gt;<br/>
+   &lt;li&gt;  <br/>
+&nbsp;&nbsp;&nbsp;&lt;form method=&quot;post&quot; action=&quot;mainpage.php&quot;&gt;	<br/>
+&nbsp;&nbsp;&nbsp;&lt;button type=&quot;submit&quot; class=&quot;cancelbtn&quot; name=&quot;logout&quot; style=&quot;float:right;font-size:22px&quot;&gt;&lt;b&gt;Log Out&lt;/b&gt;&lt;/button&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;/form&gt;<br/>
+  &lt;/li&gt;<br/>
+&nbsp;&nbsp;&nbsp;<br/>
+&lt;/ul&gt;<br/>
+&lt;/h2&gt;<br/>
+&lt;center&gt;&lt;h1&gt;ADD MANAGER&lt;/h1&gt;&lt;hr&gt;<br/>
+&lt;form method=&quot;post&quot; action=&quot;&lt;?php echo htmlspecialchars($_SERVER[&quot;PHP_SELF&quot;]);?&gt;&quot;&gt;  <br/>
+  MID:&lt;input type=&quot;number&quot; name=&quot;mid&quot; required&gt;<br/>
+  &lt;br&gt;<br/>
+  Name: &lt;input type=&quot;text&quot; name=&quot;name&quot; required&gt;<br/>
+  &lt;br&gt;<br/>
+  Gender:<br/>
+  &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;female&quot;&gt;Female<br/>
+  &lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot;&gt;Male<br/>
+  &lt;br&gt;<br/>
+  DOB: &lt;input type=&quot;date&quot; name=&quot;dob&quot; required&gt;<br/>
+  &lt;br&gt;<br/>
+  Contact no.: &lt;input type=&quot;number&quot; name=&quot;contact&quot; maxlength=&quot;10&quot; minlength=&quot;10&quot; required&gt;<br/>
+  &lt;br&gt;<br/>
+  Address: &lt;input type=&quot;text&quot; name=&quot;address&quot; required&gt;<br/>
+  &lt;br&gt;<br/>
+  Username: &lt;input type=&quot;text&quot; name=&quot;username&quot; required&gt;<br/>
+  &lt;br&gt;<br/>
+  Password: &lt;input type=&quot;password&quot; name=&quot;pwd&quot; required&gt;<br/>
+  &lt;br&gt;<br/>
+  Region: &lt;input type=&quot;text&quot; name=&quot;region&quot; required&gt;<br/>
+  &lt;br&gt;<br/>
+  &lt;button type=&quot;submit&quot; name=&quot;Submit&quot;&gt;REGISTER&lt;/button&gt;<br/>
+&lt;/form&gt;<br/>
+&lt;/font&gt;&lt;/b&gt;<br/>
+&lt;/center&gt;<br/>
+&lt;?php<br/>
+session_start();<br/>
+if(isset($_POST[&#39;logout&#39;])){<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;session_unset();<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;session_destroy();<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header( &quot;Refresh:1; url=alogin.php&quot;); <br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+function newUser()<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;include &#39;dbconfig.php&#39;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$mid=$_POST[&#39;mid&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$name=$_POST[&#39;name&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$gender=$_POST[&#39;gender&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$dob=$_POST[&#39;dob&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$contact=$_POST[&#39;contact&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$address=$_POST[&#39;address&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$username=$_POST[&#39;username&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$password=$_POST[&#39;pwd&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$region=$_POST[&#39;region&#39;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$sql = &quot;INSERT INTO manager (MID, Name, Gender, DOB,Contact,Address,Username,Password,region) VALUES (&#39;$mid&#39;,&#39;$name&#39;,&#39;$gender&#39;,&#39;$dob&#39;,&#39;$contact&#39;,&#39;$address&#39;,&#39;$username&#39;,&#39;$password&#39;,&#39;$region&#39;) &quot;;<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;if (mysqli_query($conn, $sql)) <br/>
+&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;&lt;h2&gt;Record created successfully!! Refreshing....&lt;/h2&gt;&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header( &quot;Refresh:2; url=addmanager.php&quot;);<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;} <br/>
+&nbsp;&nbsp;&nbsp;else<br/>
+&nbsp;&nbsp;&nbsp;{<br/>
+    echo &quot;Error: &quot; . $sql . &quot;&lt;br&gt;&quot; . mysqli_error($conn);<br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+}<br/>
+function checkmid()<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;include &#39;dbconfig.php&#39;;<br/>
+&nbsp;&nbsp;&nbsp;$mid=$_POST[&#39;mid&#39;];<br/>
+&nbsp;&nbsp;&nbsp;$sql= &quot;SELECT * FROM manager WHERE MID = &#39;$mid&#39;&quot;;<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;$result=mysqli_query($conn,$sql);<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(mysqli_num_rows($result)!=0)<br/>
+       {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo&quot;&lt;b&gt;&lt;br&gt;MID already exists!!&quot;;<br/>
+       }<br/>
+&nbsp;&nbsp;&nbsp;else <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(isset($_POST[&#39;Submit&#39;]))<br/>
+&nbsp;&nbsp;&nbsp;{ <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newUser();<br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;<br/>
+}<br/>
+function checkusername()<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;include &#39;dbconfig.php&#39;;<br/>
+&nbsp;&nbsp;&nbsp;$usn=$_POST[&#39;username&#39;];<br/>
+&nbsp;&nbsp;&nbsp;$sql= &quot;SELECT * FROM manager WHERE Username = &#39;$usn&#39;&quot;;<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;$result=mysqli_query($conn,$sql);<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(mysqli_num_rows($result)!=0)<br/>
+       {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo&quot;&lt;b&gt;&lt;br&gt;Username already exists!!&quot;;<br/>
+       }<br/>
+&nbsp;&nbsp;&nbsp;else <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(isset($_POST[&#39;Submit&#39;]))<br/>
+&nbsp;&nbsp;&nbsp;{ <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;checkmid();<br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;<br/>
+}<br/>
+if(isset($_POST[&#39;Submit&#39;]))<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;if(!empty($_POST[&#39;mid&#39;])&amp;&amp; !empty($_POST[&#39;region&#39;]) &amp;&amp; !empty($_POST[&#39;username&#39;]) &amp;&amp; !empty($_POST[&#39;pwd&#39;]) &amp;&amp;!empty($_POST[&#39;name&#39;]) &amp;&amp;!empty($_POST[&#39;dob&#39;])&amp;&amp; !empty($_POST[&#39;gender&#39;]) &amp;&amp;!empty($_POST[&#39;address&#39;]) &amp;&amp; !empty($_POST[&#39;contact&#39;]))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;checkusername();<br/>
+&nbsp;&nbsp;&nbsp;else<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;EMPTY VALUES NOT ALLOWED&quot;;<br/>
+}<br/>
+<br/>
+?&gt;<br/>
+<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</body></html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title></title>
+</head>
+<body>
+&lt;!DOCTYPE html&gt;<br/>
+&lt;html&gt;<br/>
+&lt;head&gt;<br/>
+&lt;link rel=&quot;stylesheet&quot; href=&quot;adminmain.css&quot;&gt; <br/>
+&lt;/head&gt;<br/>
+&lt;body background= &quot;doctordesk.jpg&quot;&gt;<br/>
+&lt;ul&gt;<br/>
+&lt;li class=&quot;dropdown&quot;&gt;&lt;font color=&quot;yellow&quot; size=&quot;10&quot;&gt;ADMIN MODE&lt;/font&gt;&lt;/li&gt;<br/>
+&lt;br&gt;<br/>
+&lt;h2&gt;<br/>
+  &lt;li class=&quot;dropdown&quot;&gt;    <br/>
+  &lt;a href=&quot;javascript:void(0)&quot; class=&quot;dropbtn&quot;&gt;Doctor&lt;/a&gt;<br/>
+    &lt;div class=&quot;dropdown-content&quot;&gt;<br/>
+      &lt;a href=&quot;adddoctor.php&quot;&gt;Add Doctor&lt;/a&gt;<br/>
+      &lt;a href=&quot;deletedoctor.php&quot;&gt;Delete Doctor&lt;/a&gt;<br/>
+      &lt;a href=&quot;showdoctor.php&quot;&gt;Show Doctor&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;showdoctorschedule.php&quot;&gt;Show Doctor Schedule&lt;/a&gt;<br/>
+    &lt;/div&gt;<br/>
+  &lt;/li&gt;<br/>
+  <br/>
+  &lt;li class=&quot;dropdown&quot;&gt;<br/>
+  &lt;a href=&quot;javascript:void(0)&quot; class=&quot;dropbtn&quot;&gt;Clinic&lt;/a&gt;<br/>
+    &lt;div class=&quot;dropdown-content&quot;&gt;<br/>
+      &lt;a href=&quot;addclinic.php&quot;&gt;Add Clinic&lt;/a&gt;<br/>
+      &lt;a href=&quot;deleteclinic.php&quot;&gt;Delete Clinic&lt;/a&gt;<br/>
+      &lt;a href=&quot;adddoctorclinic.php&quot;&gt;Assign Doctor to Clinic&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;addmanagerclinic.php&quot;&gt;Assign Manager to Clinic&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;deletedoctorclinic.php&quot;&gt;Delete Doctor from Clinic&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;deletemanagerclinic.php&quot;&gt;Delete Manager from Clinic&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;showclinic.php&quot;&gt;Show Clinic&lt;/a&gt;<br/>
+    &lt;/div&gt;<br/>
+  &lt;/li&gt;<br/>
+  &lt;li class=&quot;dropdown&quot;&gt;    <br/>
+  &lt;a href=&quot;javascript:void(0)&quot; class=&quot;dropbtn&quot;&gt;Manager&lt;/a&gt;<br/>
+    &lt;div class=&quot;dropdown-content&quot;&gt;<br/>
+      &lt;a href=&quot;addmanager.php&quot;&gt;Add Manager&lt;/a&gt;<br/>
+      &lt;a href=&quot;deletemanager.php&quot;&gt;Delete Manager&lt;/a&gt;<br/>
+&nbsp;&nbsp;&nbsp;  &lt;a href=&quot;showmanager.php&quot;&gt;Show Manager&lt;/a&gt;<br/>
+    &lt;/div&gt;<br/>
+  &lt;/li&gt;<br/>
+   &lt;li&gt;  <br/>
+&nbsp;&nbsp;&nbsp;&lt;form method=&quot;post&quot; action=&quot;mainpage.php&quot;&gt;	<br/>
+&nbsp;&nbsp;&nbsp;&lt;button type=&quot;submit&quot; class=&quot;cancelbtn&quot; name=&quot;logout&quot; style=&quot;float:right;font-size:22px&quot;&gt;&lt;b&gt;Log Out&lt;/b&gt;&lt;/button&gt;<br/>
+&nbsp;&nbsp;&nbsp;&lt;/form&gt;<br/>
+  &lt;/li&gt;<br/>
+&nbsp;&nbsp;&nbsp;<br/>
+&lt;/ul&gt;<br/>
+&lt;/h2&gt;<br/>
+&lt;h1&gt;<br/>
+&lt;center&gt;&lt;h1&gt;DELETE DOCTOR&lt;/h1&gt;&lt;hr&gt;<br/>
+&lt;form method=&quot;post&quot; action=&quot;&lt;?php echo htmlspecialchars($_SERVER[&quot;PHP_SELF&quot;]);?&gt;&quot;&gt;  <br/>
+Enter DID:&lt;center&gt;&lt;input type=&quot;number&quot; name=&quot;did&quot;&gt;&lt;/center&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button type=&quot;submit&quot; name=&quot;Submit1&quot;&gt;Delete by DID&lt;/button&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;br&gt;---------OR---------&lt;br&gt;<br/>
+Select Name:&lt;br&gt;&lt;?php<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;require_once(&#39;dbconfig.php&#39;);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$doctor_result = $conn-&gt;query(&#39;select * from doctor order by DID ASC&#39;);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;center&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;select name=&quot;doctorname&quot;&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value=&quot;&quot;&gt;---Select Name---&lt;/option&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;?php<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ($doctor_result-&gt;num_rows &gt; 0) {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while($row = $doctor_result-&gt;fetch_assoc()) {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value=&quot;&lt;?php echo $row[&quot;DID&quot;]; ?&gt;&quot;&gt;&lt;?php echo &quot;(DID= $row[DID]) Dr. &quot;.$row[&quot;Name&quot;]; ?&gt;&lt;/option&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;?php<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/select&gt;&lt;/center&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button type=&quot;submit&quot; name=&quot;Submit2&quot;&gt;Delete by Name&lt;/button&gt;<br/>
+&lt;/form&gt;			<br/>
+&lt;?php<br/>
+session_start();<br/>
+include &#39;dbconfig.php&#39;;<br/>
+if(isset($_POST[&#39;Submit1&#39;]))<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;$did=$_POST[&#39;did&#39;];<br/>
+&nbsp;&nbsp;&nbsp;$sql = &quot;DELETE FROM doctor WHERE DID= $did &quot;;<br/>
+&nbsp;&nbsp;&nbsp;$sqlda = &quot;DELETE FROM doctor_availability WHERE DID= $did &quot;;<br/>
+&nbsp;&nbsp;&nbsp;if (mysqli_query($conn, $sql))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Record deleted successfully from doctors table.Refreshing....&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header( &quot;Refresh:3; url=deletedoctor.php&quot;);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;else<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Error deleting record: &quot; . mysqli_error($conn);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;if (mysqli_query($conn, $sqlda))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Record deleted successfully from doctors_availability table.Refreshing....&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header( &quot;Refresh:3; url=deletedoctor.php&quot;);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;else<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Error deleting record: &quot; . mysqli_error($conn);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+}<br/>
+if(isset($_POST[&#39;Submit2&#39;]))<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;$did=$_POST[&#39;doctorname&#39;];<br/>
+&nbsp;&nbsp;&nbsp;$sql = &quot;DELETE FROM doctor WHERE did = $did &quot;;<br/>
+&nbsp;&nbsp;&nbsp;$sqlda = &quot;DELETE FROM doctor_availability WHERE DID= $did &quot;;<br/>
+&nbsp;&nbsp;&nbsp;if (mysqli_query($conn, $sql))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Record deleted successfully.Refreshing....&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header( &quot;Refresh:3; url=deletedoctor.php&quot;);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;else<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Error deleting record: &quot; . mysqli_error($conn);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;if (mysqli_query($conn, $sqlda))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Record deleted successfully from doctors_availability table.Refreshing....&quot;;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header( &quot;Refresh:3; url=deletedoctor.php&quot;);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;else<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Error deleting record: &quot; . mysqli_error($conn);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+}	<br/>
+if(isset($_POST[&#39;logout&#39;])){<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;session_unset();<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;session_destroy();<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header( &quot;Refresh:1; url=alogin.php&quot;); <br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+?&gt;			<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</body></html>
